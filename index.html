@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<div>
+    <h2>Карта:</h2>
+    <iframe id="mapIframe" width="350" height="250" frameborder="0" scrolling="no" marginheight="0"
+        marginwidth="0"></iframe>
+</div>
+
+<body>
+    <script>
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+
+                // Установите желаемый уровень масштабирования (zoom) здесь
+                const zoom = 15; // Увеличение масштаба
+
+                // Формируем URL с параметрами для карты OpenStreetMap с маркером на текущем местоположении пользователя
+                const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${longitude - 0.01
+                    },${latitude - 0.01},${longitude + 0.01},${latitude + 0.01
+                    }&layer=mapnik&m=${zoom}&marker=${latitude},${longitude}`;
+
+                const iframe = document.getElementById("mapIframe");
+                iframe.src = mapUrl;
+            },
+            (error) => {
+                if (error.code === 1) {
+                    setErrorMessage("Доступ к геолокации был отклонен. Пожалуйста, разрешите доступ к геолокации в настройках браузера или устройства.");
+                } else {
+                    setErrorMessage("Произошла ошибка при получении геолокации.");
+                }
+                console.log("Error getting geolocation:", error);
+            }
+        );
+    </script>
+</body>
+
+</html>
